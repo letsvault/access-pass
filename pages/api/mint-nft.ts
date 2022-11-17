@@ -36,7 +36,7 @@ export default async function handler(
                 "polygon", // configure this to your network
             );
     
-            const contractAddress = '0xB5CBF0BE6413F8F7241A1D32725286DB078784ed';
+            const contractAddress = process.env.CONTRACT_ADDRESS as string;
             const contract = await sdk.getContract(contractAddress, "edition-drop");
 
             const tokenId = 1;

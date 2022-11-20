@@ -26,14 +26,13 @@ export default async function handler(
     res: NextApiResponse
 ) {
     try {
-        const { address } = req.body;
-
+        const { recipientWalletAddress } = req.body;
         const key = await getSecretVersion();
 
         if (key) {
             const sdk = ThirdwebSDK.fromPrivateKey(
-                key, // Your wallet private key
-                "polygon", // configure this to your network
+                key,
+                "polygon",
             );
     
             const contractAddress = process.env.CONTRACT_ADDRESS as string;
@@ -41,7 +40,8 @@ export default async function handler(
 
             const tokenId = 1;
             const quantity = 1;
-            const transaction = await contract.claimTo(address as string, tokenId, quantity);
+            
+            await contract.claimTo(recipientWalletAddress as string, tokenId, quantity);
 
             const metadata = (await contract.get(tokenId)).metadata;
 

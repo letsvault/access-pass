@@ -178,5 +178,13 @@
     "files": [
       "static/chunks/node_modules_thirdweb-dev_contracts-js_factories_TWProxy__factory_dist_thirdweb-dev-contracts-a26ff3.js"
     ]
+  },
+  "../node_modules/@wagmi/core/connectors/coinbaseWallet/dist/wagmi-core-connectors-coinbaseWallet.esm.js -> @coinbase/wallet-sdk": {
+    "id": "../node_modules/@wagmi/core/connectors/coinbaseWallet/dist/wagmi-core-connectors-coinbaseWallet.esm.js -> @coinbase/wallet-sdk",
+    "files": []
+  },
+  "../node_modules/@wagmi/core/connectors/walletConnect/dist/wagmi-core-connectors-walletConnect.esm.js -> @walletconnect/ethereum-provider": {
+    "id": "../node_modules/@wagmi/core/connectors/walletConnect/dist/wagmi-core-connectors-walletConnect.esm.js -> @walletconnect/ethereum-provider",
+    "files": []
   }
 }

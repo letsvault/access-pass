@@ -1,9 +1,12 @@
 import { ThirdwebNftMedia, useAddress, useContract } from "@thirdweb-dev/react";
 import { useState } from "react";
-import { useMagic } from "@thirdweb-dev/react/evm/connectors/magic";
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
-import { NFT, NFTMetadata } from "@thirdweb-dev/sdk";
+import { NFTMetadata } from "@thirdweb-dev/sdk";
+import {
+  CreateWallet,
+  PaperUser,
+} from "@paperxyz/react-client-sdk";
 
 
 const Home: NextPage = () => {
@@ -12,11 +15,12 @@ const Home: NextPage = () => {
     "edition-drop"
   );
 
-  const connectWithMagic = useMagic();
   const [email, setEmail] = useState<string>("");
-  const address = useAddress();
+  // const address = useAddress();
   const [loading, setLoading] = useState<boolean>(false);
   const [mintedNft, setMintedNft] = useState<NFTMetadata | undefined>(undefined);
+  const [recipientWalletAddress, setRecipientWalletAddress] = useState("");
+  const [creatingWallet, setCreatingWallet] = useState<boolean>(false);
 
   async function mintNft() {
     setLoading(true);
@@ -24,10 +28,9 @@ const Home: NextPage = () => {
     try {
       const result = await fetch("/api/mint-nft", {
         method: "POST",
-        body: JSON.stringify({address}),
+        body: JSON.stringify({recipientWalletAddress}),
         headers: {
           "Content-Type": "application/json",
-
         }
       });
       
@@ -46,7 +49,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        {address ? (
+        {recipientWalletAddress ? (
           <>
             <h2>Hi, Alum! 👋 </h2>
             <button 
@@ -68,20 +71,32 @@ const Home: NextPage = () => {
         ) : (
           <>
             <h2>Login With Email </h2>
-            <div>
+             <div>
               <input 
               type="email"
               placeholder="Your Email Address"
               onChange={(e) => setEmail(e.target.value)}
               />
-
-              <button
-                onClick={() => {
-                  connectWithMagic({ email })
+            </div>
+            <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+              <CreateWallet
+                emailAddress={email}
+                onEmailVerificationInitiated={() => setCreatingWallet(true)}
+                onSuccess={(user: PaperUser) => {
+                  setRecipientWalletAddress(user.walletAddress);
+                }}
+                onError={(error) => {
+                  console.log("error", error);
                 }}
               >
-                Login
-              </button>
+                {/* @ts-ignore */}
+                <button 
+                  disabled={creatingWallet}
+                >
+                {creatingWallet ? ('Loading...') : ('Verify Email')}
+                </button>
+              </CreateWallet>
+              {creatingWallet ? (<h3>If this is your first time logging in, check your email inbox!</h3>) : ("")}
 
             </div>
           </>

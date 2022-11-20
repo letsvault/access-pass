@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import "../styles/globals.css";
 import { MagicConnector } from "@thirdweb-dev/react/evm/connectors/magic";
+import { PaperSDKProvider } from "@paperxyz/react-client-sdk";
 
 const magicLinkConnector = new MagicConnector({
   options: {
@@ -18,12 +19,14 @@ const activeChainId = ChainId.Polygon;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebProvider 
-      desiredChainId={activeChainId}
-      walletConnectors= {[magicLinkConnector]}
-    >
-      <Component {...pageProps} />
-    </ThirdwebProvider>
+    <PaperSDKProvider chainName="Polygon">
+      <ThirdwebProvider 
+        desiredChainId={activeChainId}
+        walletConnectors= {[magicLinkConnector]}
+      >
+        <Component {...pageProps} />
+      </ThirdwebProvider>
+    </PaperSDKProvider>
   );
 }
 

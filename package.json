@@ -11,6 +11,7 @@
     "deploy": "next build && next export && npx thirdweb@latest upload out"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0-0",
     "@google-cloud/secret-manager": "^4.1.4",
     "@paperxyz/react-client-sdk": "^0.7.38",
     "@thirdweb-dev/react": "^3",
@@ -19,6 +20,7 @@
     "next": "^12.1.6",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-native": "^0.70.6",
     "yarn": "^1.22.19"
   },
   "devDependencies": {

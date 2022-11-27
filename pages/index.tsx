@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import { NFTMetadata } from "@thirdweb-dev/sdk";
+import  Image  from "next/image"
 import {
   CreateWallet,
   PaperUser,
@@ -65,6 +66,15 @@ const Home: NextPage = () => {
                 <ThirdwebNftMedia 
                   metadata={mintedNft} 
                   style={{width:300}}/>
+
+                <form className={styles.engageButtonAndLogo} action="https://discord.gg/5GXRS5Bp8R" method="get" target="_blank">
+                  <button className={styles.engageButton} type="submit">Join the Discord</button>
+                  <Image width={50} height={50} src="/discord.png" alt="discord logo"></Image>
+                </form>
+                <form className={styles.engageButtonAndLogo} action="https://app.dework.xyz/i/0iArJIWaUyOHy8NOOffjyz" method="get" target="_blank">
+                  <button className={styles.engageButton} type="submit">View our job board</button>
+                  <Image width={40} height={40} src="/dework.png" alt="dework logo"></Image>
+                </form>
               </div>
             )}
           </>

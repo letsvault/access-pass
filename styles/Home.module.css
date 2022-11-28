@@ -124,6 +124,17 @@
   filter: invert(1);
 }
 
+.engageButton {
+  height: 30px;
+  margin-right: 10px;
+}
+
+.engageButtonAndLogo {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+}
+
 .signinOption {
   display: flex;
   flex-direction: column;

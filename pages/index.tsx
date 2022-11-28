@@ -6,6 +6,7 @@ import { NFTMetadata } from "@thirdweb-dev/sdk";
 import {
   CreateWallet,
   PaperUser,
+  LoginWithPaper
 } from "@paperxyz/react-client-sdk";
 
 
@@ -16,11 +17,11 @@ const Home: NextPage = () => {
   );
 
   const [email, setEmail] = useState<string>("");
-  // const address = useAddress();
   const [loading, setLoading] = useState<boolean>(false);
   const [mintedNft, setMintedNft] = useState<NFTMetadata | undefined>(undefined);
   const [recipientWalletAddress, setRecipientWalletAddress] = useState("");
   const [creatingWallet, setCreatingWallet] = useState<boolean>(false);
+  const [userCode, setUserCode] = useState<string | undefined>(undefined);
 
   async function mintNft() {
     setLoading(true);
@@ -45,10 +46,69 @@ const Home: NextPage = () => {
       setLoading(false);
     }
   }
+
+  async function exchangeCodeForToken(code: string) {
+    try {
+      const response = await fetch('/api/exchange-user-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+
+      const token = await response.json();
+
+      if (token) {
+        getUserDetails(token);
+        getBalance(token);
+      }
+
+    } catch (error){
+      console.log(error);
+    }
+  }
+
+  async function getUserDetails(userToken: string) {
+    try {
+      const response = await fetch('/api/get-user-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userToken }),
+      });
+
+      const userDetails = await response.json();
+      setEmail(userDetails.email);
+      setRecipientWalletAddress(userDetails.walletAddress);
+
+      console.log(userDetails);
+
+    } catch (error){
+      console.log(error);
+    }
+  }
+
+  async function getBalance(userToken: string) {
+    try {
+      const response = await fetch('/api/get-access-pass-balance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userToken }),
+      });
+
+      const nftsHeld = await response.json();
+
+      if (nftsHeld) {
+        setMintedNft(nftsHeld as NFTMetadata);
+      }
+
+    } catch (error){
+      console.log(error);
+    }
+  }
   
   return (
     <div className={styles.container}>
       <main className={styles.main}>
+      <h1>University Alumni Access Pass</h1>
         {recipientWalletAddress ? (
           <>
             <h2>Hi, Alum! 👋 </h2>
@@ -70,38 +130,47 @@ const Home: NextPage = () => {
           </>
         ) : (
           <>
-            <h2>Login With Email </h2>
-             <div>
-              <input 
-              type="email"
-              placeholder="Your Email Address"
-              onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-              <CreateWallet
-                emailAddress={email}
-                onEmailVerificationInitiated={() => setCreatingWallet(true)}
-                onSuccess={(user: PaperUser) => {
-                  setRecipientWalletAddress(user.walletAddress);
-                }}
-                onError={(error) => {
-                  console.log("error", error);
-                }}
-              >
-                {/* @ts-ignore */}
-                <button 
-                  disabled={creatingWallet}
-                >
-                {creatingWallet ? ('Loading...') : ('Verify Email')}
-                </button>
-              </CreateWallet>
-              {creatingWallet ? (<h3>If this is your first time logging in, check your email inbox!</h3>) : ("")}
-
+            <div style={{display:'flex', justifyContent: 'space-between'}}>
+              <div className={styles.signinOption} style={{marginRight: '200px'}}>
+                <h2>Register </h2>
+                <div>
+                  <input 
+                  type="email"
+                  placeholder="Your Email Address"
+                  onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                  <CreateWallet
+                    emailAddress={email}
+                    onEmailVerificationInitiated={() => setCreatingWallet(true)}
+                    onSuccess={(user: PaperUser) => {
+                      setRecipientWalletAddress(user.walletAddress);
+                    }}
+                    onError={(error) => {
+                      console.log("error", error);
+                    }}
+                  >
+                    {/* @ts-ignore */}
+                    <button 
+                      disabled={creatingWallet}
+                    >
+                    {creatingWallet ? ('Loading...') : ('First time here')}
+                    </button>
+                  </CreateWallet>
+                  </div>
+              </div>
+              <div className={styles.signinOption}>
+                <h2>Login</h2>
+                  <LoginWithPaper onSuccess={async (code: string) => {
+                    setUserCode(code);
+                    exchangeCodeForToken(code);
+                  }}/>
+              </div>
             </div>
           </>
         )}
-        
+        {creatingWallet ? (<h3>First time here? Check your email inbox!</h3>) : ("")}
       </main>
     </div>
   );

@@ -180,7 +180,7 @@ const Home: NextPage = () => {
             </div>
           </>
         )}
-        {creatingWallet ? (<h3>First time here? Check your email inbox!</h3>) : ("")}
+        {creatingWallet && !recipientWalletAddress ? (<h3>First time here? Check your email inbox!</h3>) : ("")}
       </main>
     </div>
   );

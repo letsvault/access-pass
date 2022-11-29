@@ -150,7 +150,7 @@ const Home: NextPage = () => {
           </>
         )}
 
-        {currentPage === Page.VIEW_PASS && mintedNft && mintedNft.name !== undefined &&(
+        {mintedNft !== undefined && currentPage === Page.VIEW_PASS &&  (
           <ViewPass mintedNft={mintedNft}></ViewPass>
         )}
 

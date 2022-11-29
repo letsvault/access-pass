@@ -1,15 +1,18 @@
-import { ThirdwebNftMedia, useAddress, useContract } from "@thirdweb-dev/react";
+import { useContract } from "@thirdweb-dev/react";
 import { useState } from "react";
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import { NFTMetadata } from "@thirdweb-dev/sdk";
+import { ThirdwebNftMedia } from "@thirdweb-dev/react";
 import  Image  from "next/image"
-import {
-  CreateWallet,
-  PaperUser,
-  LoginWithPaper
-} from "@paperxyz/react-client-sdk";
+import Login from "./login";
 
+export enum Page {
+  LOGIN = 'login',
+  CLAIM_NEW_PASS = 'claim new pass',
+  VIEW_PASS = 'view pass',
+  LOADING = 'loading',
+}
 
 const Home: NextPage = () => {
   const { contract } = useContract(
@@ -17,15 +20,17 @@ const Home: NextPage = () => {
     "edition-drop"
   );
 
+  const [currentPage, setCurrentPage] = useState<Page>(Page.LOGIN);
   const [email, setEmail] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [mintedNft, setMintedNft] = useState<NFTMetadata | undefined>(undefined);
-  const [recipientWalletAddress, setRecipientWalletAddress] = useState("");
+  const [loggingIn, setLoggingIn ] = useState<boolean>(false);
+  const [minting, setMinting] = useState<boolean>(false);
+  const [mintedNft, setMintedNft] = useState<NFTMetadata | null>(null);
+  const [recipientWalletAddress, setRecipientWalletAddress] = useState<string>("");
   const [creatingWallet, setCreatingWallet] = useState<boolean>(false);
-  const [userCode, setUserCode] = useState<string | undefined>(undefined);
+  const [userCode, setUserCode] = useState<string>("");
 
   async function mintNft() {
-    setLoading(true);
+    setMinting(true);
 
     try {
       const result = await fetch("/api/mint-nft", {
@@ -39,16 +44,18 @@ const Home: NextPage = () => {
       const mintedNftMetadata = await result.json();
 
       setMintedNft(mintedNftMetadata as NFTMetadata);
+      setCurrentPage(Page.VIEW_PASS);
 
     } catch (error){
       console.log(error);
       alert("Something went wrong. Please try again.")
     } finally {
-      setLoading(false);
+      setMinting(false);
     }
   }
 
   async function exchangeCodeForToken(code: string) {
+    setLoggingIn(true);
     try {
       const response = await fetch('/api/exchange-user-token', {
         method: 'POST',
@@ -101,6 +108,9 @@ const Home: NextPage = () => {
         setMintedNft(nftsHeld as NFTMetadata);
       }
 
+      setLoggingIn(false);
+      setCurrentPage(Page.VIEW_PASS);
+
     } catch (error){
       console.log(error);
     }
@@ -110,77 +120,58 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <main className={styles.main}>
       <h1>University Alumni Access Pass</h1>
-        {recipientWalletAddress ? (
+
+        {loggingIn && (
+          <h2>Retreiving your Access Pass...</h2>
+        )}
+
+        {!loggingIn && currentPage === Page.LOGIN && (
+          <Login
+            email={email} 
+            setEmail={setEmail} 
+            creatingWallet={creatingWallet} 
+            setCreatingWallet={setCreatingWallet} 
+            recipientWalletAddress={recipientWalletAddress}
+            setRecipientWalletAddress={setRecipientWalletAddress}
+            setUserCode={setUserCode} 
+            exchangeCodeForToken={exchangeCodeForToken}
+            setCurrentPage={setCurrentPage}>
+          </Login>
+        )}
+
+        {currentPage === Page.CLAIM_NEW_PASS && (
           <>
             <h2>Hi, Alum! 👋 </h2>
             <button 
               onClick={() => mintNft()}
-              disabled={mintedNft !== undefined}
+              disabled={mintedNft !== null}
             >
-                {loading ? ("Loading...") : mintedNft ? ("Access Pass Claimed") : ("Get Your Access Pass")}
+                {minting ? ("Loading...") : ("Get Your Access Pass")}
             </button>
-
-            {mintedNft && (
-              <div className={styles.nft}>
-                <h3>Your Access Pass</h3>
-                <ThirdwebNftMedia 
-                  metadata={mintedNft} 
-                  style={{width:300}}/>
-
-                <form className={styles.engageButtonAndLogo} action="https://discord.gg/5GXRS5Bp8R" method="get" target="_blank">
-                  <button className={styles.engageButton} type="submit">Join the conversation</button>
-                  <Image width={50} height={50} src="/discord.png" alt="discord logo"></Image>
-                </form>
-                <form className={styles.engageButtonAndLogo} action="https://app.dework.xyz/i/0iArJIWaUyOHy8NOOffjyz" method="get" target="_blank">
-                  <button className={styles.engageButton} type="submit">View open grants</button>
-                  <Image width={40} height={40} src="/dework.png" alt="dework logo"></Image>
-                </form>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <div style={{display:'flex', justifyContent: 'space-between'}}>
-              <div className={styles.signinOption} style={{marginRight: '200px'}}>
-                <h2>Register </h2>
-                <div>
-                  <input 
-                  type="email"
-                  placeholder="Your Email Address"
-                  onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                  <CreateWallet
-                    emailAddress={email}
-                    onEmailVerificationInitiated={() => setCreatingWallet(true)}
-                    onSuccess={(user: PaperUser) => {
-                      setRecipientWalletAddress(user.walletAddress);
-                    }}
-                    onError={(error) => {
-                      console.log("error", error);
-                    }}
-                  >
-                    {/* @ts-ignore */}
-                    <button 
-                      disabled={creatingWallet}
-                    >
-                    {creatingWallet ? ('Loading...') : ('First time here')}
-                    </button>
-                  </CreateWallet>
-                  </div>
-              </div>
-              <div className={styles.signinOption}>
-                <h2>Login</h2>
-                  <LoginWithPaper onSuccess={async (code: string) => {
-                    setUserCode(code);
-                    exchangeCodeForToken(code);
-                  }}/>
-              </div>
-            </div>
           </>
         )}
-        {creatingWallet && !recipientWalletAddress ? (<h3>First time here? Check your email inbox!</h3>) : ("")}
+
+        {currentPage === Page.VIEW_PASS && mintedNft !== null && (
+          <div className={styles.nft}>
+            <ThirdwebNftMedia 
+                metadata={mintedNft} 
+                style={{width:300}}/>
+            <div style={{marginTop: '10px'}}>
+                <form className={styles.engageButtonAndLogo} action="https://discord.gg/5GXRS5Bp8R" method="get" target="_blank">
+                    <button className={styles.engageButton} type="submit">Join the conversation</button>
+                    <Image width={50} height={50} src="/discord.png" alt="discord logo"></Image>
+                </form>
+                <form className={styles.engageButtonAndLogo} action="https://app.dework.xyz/i/0iANxqqEjdh2PVGeS3eYfZ" method="get" target="_blank">
+                    <button className={styles.engageButton} type="submit">View open grants</button>
+                    <Image width={40} height={40} src="/dework.png" alt="dework logo"></Image>
+                </form>
+            </div>
+        </div>
+        )}
+
+        <div style={{marginTop: '30px'}}>
+          <p>If you have any issues {currentPage === Page.LOGIN ? "claiming or " : ""} connecting, reach out to us at team@letsvault.xyz.</p>
+        </div>
       </main>
     </div>
   );

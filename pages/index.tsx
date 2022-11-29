@@ -3,7 +3,8 @@ import { useState } from "react";
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import { NFTMetadata } from "@thirdweb-dev/sdk";
-import ViewPass from "./view-pass";
+import { ThirdwebNftMedia } from "@thirdweb-dev/react";
+import  Image  from "next/image"
 import Login from "./login";
 
 export enum Page {
@@ -23,10 +24,10 @@ const Home: NextPage = () => {
   const [email, setEmail] = useState<string>("");
   const [loggingIn, setLoggingIn ] = useState<boolean>(false);
   const [minting, setMinting] = useState<boolean>(false);
-  const [mintedNft, setMintedNft] = useState<NFTMetadata | undefined>(undefined);
+  const [mintedNft, setMintedNft] = useState<NFTMetadata | null>(null);
   const [recipientWalletAddress, setRecipientWalletAddress] = useState<string>("");
   const [creatingWallet, setCreatingWallet] = useState<boolean>(false);
-  const [userCode, setUserCode] = useState<string | undefined>(undefined);
+  const [userCode, setUserCode] = useState<string>("");
 
   async function mintNft() {
     setMinting(true);
@@ -143,15 +144,29 @@ const Home: NextPage = () => {
             <h2>Hi, Alum! 👋 </h2>
             <button 
               onClick={() => mintNft()}
-              disabled={mintedNft !== undefined}
+              disabled={mintedNft !== null}
             >
                 {minting ? ("Loading...") : ("Get Your Access Pass")}
             </button>
           </>
         )}
 
-        {mintedNft !== undefined && currentPage === Page.VIEW_PASS && (
-          <ViewPass mintedNft={mintedNft}></ViewPass>
+        {currentPage === Page.VIEW_PASS && mintedNft !== null && (
+          <div className={styles.nft}>
+            <ThirdwebNftMedia 
+                metadata={mintedNft} 
+                style={{width:300}}/>
+            <div style={{marginTop: '10px'}}>
+                <form className={styles.engageButtonAndLogo} action="https://discord.gg/5GXRS5Bp8R" method="get" target="_blank">
+                    <button className={styles.engageButton} type="submit">Join the conversation</button>
+                    <Image width={50} height={50} src="/discord.png" alt="discord logo"></Image>
+                </form>
+                <form className={styles.engageButtonAndLogo} action="https://app.dework.xyz/i/0iANxqqEjdh2PVGeS3eYfZ" method="get" target="_blank">
+                    <button className={styles.engageButton} type="submit">View open grants</button>
+                    <Image width={40} height={40} src="/dework.png" alt="dework logo"></Image>
+                </form>
+            </div>
+        </div>
         )}
 
         <div style={{marginTop: '30px'}}>

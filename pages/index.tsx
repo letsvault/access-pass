@@ -135,13 +135,15 @@ const Home: NextPage = () => {
                 exchangeCodeForToken(code);
               }}>
                 {/* @ts-ignore */}
-                <button className={styles.loginButton}>Login</button>
+                <button className={styles.loginButton}>{currentPage === Page.LOGIN ? "Login" : "Logged In"}</button>
              </LoginWithPaper> 
           </div>
         </nav>
       </header>
       <main className={styles.main}>
-      <h1>Get Your <span style={{color: "#537FE7"}}>University Alumni </span>Access Pass</h1>
+        {currentPage === Page.LOGIN && (
+          <h1>Get Your <span style={{color: "#537FE7"}}>University Alumni </span>Access Pass</h1>
+        )}
 
         {loggingIn && (
           <h2>Retreiving your Access Pass...</h2>

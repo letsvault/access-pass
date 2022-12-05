@@ -57,7 +57,7 @@ const Login: NextPage<Props> = (props) => {
                     {/* @ts-ignore */}
                     <button 
                       className={styles.createWalletButton}
-                      disabled={creatingWallet}
+                      disabled={!email || creatingWallet}
                     >
                     {creatingWallet ? ('Loading...') : ('First time here')}
                     </button>

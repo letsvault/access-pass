@@ -3,13 +3,11 @@
 }
 
 .main {
-  /* min-height: 100vh; */
   padding: 8rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: center; */
 }
 
 .nft {
@@ -28,6 +26,9 @@
 .engageButton {
   height: 30px;
   margin-right: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .engageButtonAndLogo {
@@ -49,11 +50,8 @@
 }
 
 .loginButton {
-  font-family:  Verdana, sans-serif;
-  border: none;
   height: 50px;
   padding: 0 3rem;
-  border-radius: 1.5rem;
   background-color: #537FE7;
   font-size: medium;
   font-weight: 700;
@@ -61,9 +59,7 @@
 }
 
 .howItWorksButton {
-  font-family:  Verdana, sans-serif;
   background: transparent;
-  border: none;
   font-size: medium;
   margin-left: 2rem;
 }
@@ -78,7 +74,6 @@
 }
 
 .createWalletInput {
-  font-family:  Verdana, sans-serif;
   flex-grow: 2;
   border: none;
   width: 400px;
@@ -92,12 +87,9 @@
 }
 
 .createWalletButton {
-  font-family:  Verdana, sans-serif;
   display: flex;
   align-items: center;
-  border-radius: 1.5rem;
   background-color: #537FE7;
-  border: none;
   height: 2rem;
   padding: 1rem;
 }

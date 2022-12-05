@@ -34,17 +34,15 @@ const Login: NextPage<Props> = (props) => {
 
     return (
         <>
-            <div style={{display:'flex', justifyContent: 'space-between'}}>
+            <div className="loginComponent" style={{display:'flex', justifyContent: 'space-between'}}>
               <div className={styles.signinOption} style={{marginRight: '200px'}}>
-                <h2>Register </h2>
-                <div>
-                  <input 
+                <form className={styles.createWalletForm}>
+                <input 
+                  className={styles.createWalletInput}
                   type="email"
                   placeholder="Your Email Address"
                   onChange={(e) => setEmail(e.target.value)}
                   />
-                </div>
-                <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                   <CreateWallet
                     emailAddress={email}
                     onEmailVerificationInitiated={() => setCreatingWallet(true)}
@@ -58,19 +56,13 @@ const Login: NextPage<Props> = (props) => {
                   >
                     {/* @ts-ignore */}
                     <button 
-                      disabled={creatingWallet}
+                      className={styles.createWalletButton}
+                      disabled={!email || creatingWallet}
                     >
                     {creatingWallet ? ('Loading...') : ('First time here')}
                     </button>
                   </CreateWallet>
-                  </div>
-              </div>
-              <div className={styles.signinOption}>
-                <h2>Login</h2>
-                  <LoginWithPaper onSuccess={async (code: string) => {
-                    setUserCode(code);
-                    exchangeCodeForToken(code);
-                  }}/>
+                </form>
               </div>
             </div>
             {creatingWallet && !recipientWalletAddress ? (<h3>First time here? Check your email inbox!</h3>) : ("")}

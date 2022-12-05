@@ -134,6 +134,7 @@ const Home: NextPage = () => {
                 setUserCode(code);
                 exchangeCodeForToken(code);
               }}>
+                {/* @ts-ignore */}
                 <button className={styles.loginButton}>Login</button>
              </LoginWithPaper> 
           </div>

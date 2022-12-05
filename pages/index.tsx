@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import { NFTMetadata } from "@thirdweb-dev/sdk";
 import { ThirdwebNftMedia } from "@thirdweb-dev/react";
+import { LoginWithPaper } from "@paperxyz/react-client-sdk";
 import  Image  from "next/image"
 import Login from "./login";
 
@@ -118,8 +119,28 @@ const Home: NextPage = () => {
   
   return (
     <div className={styles.container}>
+      <header>
+        <nav className={styles.navBar}>
+          <div className={styles.headerLogo}>
+          <Image width={50} height={50} src="/favicon.ico" alt="access pass logo"></Image>
+          </div>
+          <div className={styles.navButtons}>
+            {/* UNCOMMENT ONCE HOW IT WORKS IS LIVE */}
+            {/* <button className={styles.howItWorksButton}>
+              How it works
+            </button> */}
+            <LoginWithPaper 
+              onSuccess={async (code: string) => {
+                setUserCode(code);
+                exchangeCodeForToken(code);
+              }}>
+                <button className={styles.loginButton}>Login</button>
+             </LoginWithPaper> 
+          </div>
+        </nav>
+      </header>
       <main className={styles.main}>
-      <h1>University Alumni Access Pass</h1>
+      <h1>Get Your <span style={{color: "#537FE7"}}>University Alumni </span>Access Pass</h1>
 
         {loggingIn && (
           <h2>Retreiving your Access Pass...</h2>
@@ -169,7 +190,7 @@ const Home: NextPage = () => {
         </div>
         )}
 
-        <div style={{marginTop: '30px'}}>
+        <div style={{marginTop: '20px'}}>
           <p>If you have any issues {currentPage === Page.LOGIN ? "claiming or " : ""} connecting, reach out to us at team@letsvault.xyz.</p>
         </div>
       </main>

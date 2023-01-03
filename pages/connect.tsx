@@ -66,12 +66,6 @@ const Connect = (props: connectProps) => {
             tagline: "Give back",
             builtWith: "LinkU Give",
             link: "",
-        },
-        {
-            size: "small",
-            tagline: "Placeholder",
-            builtWith: "Placeholder",
-            link: "",
         }
     ];
 

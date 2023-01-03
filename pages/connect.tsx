@@ -23,7 +23,7 @@ const SingleApp = (props: applicationProps) => {
                 style={{height:height, cursor: props.link ? 'pointer' : 'default'}} 
                 disabled={!props.link}>
                     <h3 className={styles.appButtonTagline}>{props.tagline}</h3>
-                    <p className={styles.builtWith}>Built with {props.builtWith}</p>
+                    <p className={styles.builtWith}>Built with {props.builtWith}{!props.link ? " (Coming Soon)" : ""}</p>
             </button>
         </form>
     )
@@ -31,18 +31,6 @@ const SingleApp = (props: applicationProps) => {
 
 const Connect = (props: connectProps) => {
     const applications = [
-        {
-            size: "small",
-            tagline: "Find a new career",
-            builtWith: "Console",
-            link: "",
-        },
-        {
-            size: "small",
-            tagline: "Get updates from ExampleU",
-            builtWith: "XMTP",
-            link: "",
-        },
         {
             size: "small",
             tagline: "Join the conversation",
@@ -57,6 +45,12 @@ const Connect = (props: connectProps) => {
         },
         {
             size: "small",
+            tagline: "Find a new career",
+            builtWith: "Console",
+            link: "",
+        },
+        {
+            size: "small",
             tagline: "Audit online classes",
             builtWith: "LinkU Stream",
             link: "",
@@ -66,29 +60,39 @@ const Connect = (props: connectProps) => {
             tagline: "Give back",
             builtWith: "LinkU Give",
             link: "",
+        },
+        {
+            size: "small",
+            tagline: "Get updates from ExampleU",
+            builtWith: "XMTP",
+            link: "",
         }
     ];
 
 
     return (
-        <div className={styles.connectColumns}>
-                <ThirdwebNftMedia 
-                    className={styles.nftStyle}
-                    metadata={props.mintedNft} />
-            
-                {applications.map((application => {
-                    return (
-                        <SingleApp 
-                        key={application.tagline}
-                        size={application.size}
-                        tagline={application.tagline}
-                        builtWith={application.builtWith}
-                        link={application.link}
-                    ></SingleApp>
-                    )
+        <div>
+            <h1>Example University</h1>
+            <div className={styles.connectColumns}>
+                    <ThirdwebNftMedia 
+                        className={styles.nftStyle}
+                        metadata={props.mintedNft} />
+                
+                    {applications.map((application => {
+                        return (
+                            <SingleApp 
+                            key={application.tagline}
+                            size={application.size}
+                            tagline={application.tagline}
+                            builtWith={application.builtWith}
+                            link={application.link}
+                        ></SingleApp>
+                        )
 
-                }) )}
+                    }) )}
+            </div>
         </div>
+
     )
 }
 

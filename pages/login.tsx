@@ -35,7 +35,7 @@ const Login: NextPage<Props> = (props) => {
     return (
         <>
             <div className="loginComponent" style={{display:'flex', justifyContent: 'space-between'}}>
-              <div className={styles.signinOption} style={{marginRight: '200px'}}>
+              <div className={styles.signinOption}>
                 <form className={styles.createWalletForm}>
                 <input 
                   className={styles.createWalletInput}
@@ -44,6 +44,7 @@ const Login: NextPage<Props> = (props) => {
                   onChange={(e) => setEmail(e.target.value)}
                   />
                   <CreateWallet
+                    sendEmailOnCreation={true}
                     emailAddress={email}
                     onEmailVerificationInitiated={() => setCreatingWallet(true)}
                     onSuccess={(user: PaperUser) => {

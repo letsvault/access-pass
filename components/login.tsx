@@ -1,13 +1,13 @@
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
-import { Page } from ".";
+import { Page } from "../pages";
 import {
     CreateWallet,
     PaperUser,
     LoginWithPaper
   } from "@paperxyz/react-client-sdk";
 
-interface Props {
+interface loginProps {
     email: string,
     setEmail: Function;
     creatingWallet: boolean,
@@ -19,7 +19,7 @@ interface Props {
     setCurrentPage: Function;
 }
 
-const Login: NextPage<Props> = (props) => {
+const Login = (props: loginProps) => {
     const { 
         email, 
         setEmail, 

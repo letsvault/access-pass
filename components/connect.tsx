@@ -4,7 +4,7 @@ import { ThirdwebNftMedia } from "@thirdweb-dev/react";
 import styles from "../styles/Connect.module.css";
 
 interface connectProps {
-    mintedNft: NFTMetadata
+    mintedNft: NFTMetadata | null
 }
 
 interface applicationProps {
@@ -69,15 +69,17 @@ const Connect = (props: connectProps) => {
         }
     ];
 
-
     return (
         <div>
             <h1>Example University</h1>
             <div className={styles.connectColumns}>
-                    <ThirdwebNftMedia 
+                    {props?.mintedNft !== null ? 
+                        <ThirdwebNftMedia 
                         className={styles.nftStyle}
                         metadata={props.mintedNft} />
-                
+                    : {}
+                    }
+                    
                     {applications.map((application => {
                         return (
                             <SingleApp 

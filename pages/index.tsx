@@ -6,8 +6,8 @@ import { NFTMetadata } from "@thirdweb-dev/sdk";
 import { ThirdwebNftMedia } from "@thirdweb-dev/react";
 import { LoginWithPaper } from "@paperxyz/react-client-sdk";
 import  Image  from "next/image"
-import Login from "./login";
-import Connect from "./connect";
+import Login from "../components/login";
+import Connect from "../components/connect";
 
 export enum Page {
   LOGIN = 'login',
@@ -160,8 +160,7 @@ const Home: NextPage = () => {
             setRecipientWalletAddress={setRecipientWalletAddress}
             setUserCode={setUserCode} 
             exchangeCodeForToken={exchangeCodeForToken}
-            setCurrentPage={setCurrentPage}>
-          </Login>
+            setCurrentPage={setCurrentPage}/>
         )}
 
         {currentPage === Page.CLAIM_NEW_PASS && (
@@ -178,24 +177,9 @@ const Home: NextPage = () => {
 
         {currentPage === Page.VIEW_PASS && mintedNft !== null && (
           <div>
-            {/* <div className={styles.nft}>
-              <ThirdwebNftMedia 
-                  metadata={mintedNft} 
-                  style={{width:300}}/>
-              <div style={{marginTop: '10px'}}>
-                  <form className={styles.engageButtonAndLogo} action="https://discord.gg/5GXRS5Bp8R" method="get" target="_blank">
-                      <button className={styles.engageButton} type="submit">Join the conversation</button>
-                      <Image width={50} height={50} src="/discord.png" alt="discord logo"></Image>
-                  </form>
-                  <form className={styles.engageButtonAndLogo} action="https://app.dework.xyz/i/0iANxqqEjdh2PVGeS3eYfZ" method="get" target="_blank">
-                      <button className={styles.engageButton} type="submit">View open grants</button>
-                      <Image width={40} height={40} src="/dework.png" alt="dework logo"></Image>
-                  </form>
-              </div>
-          </div> */}
-          <Connect
-          mintedNft={mintedNft}
-          ></Connect>
+            <Connect
+            mintedNft={mintedNft ? mintedNft : null}
+            ></Connect>
         </div>
         )}
 

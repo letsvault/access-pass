@@ -1829,10 +1829,10 @@
   dependencies:
     ethers "^5.7.2"
 
-"@paperxyz/react-client-sdk@^0.8.9":
-  version "0.8.9"
-  resolved "https://registry.yarnpkg.com/@paperxyz/react-client-sdk/-/react-client-sdk-0.8.9.tgz#201e85640be6e2a559d21d3269474da95d9ed358"
-  integrity sha512-/Sgv5oJX52Er5lo2SarDR3CIqVmVNoBtRxfUo4YMSgnG2WueTpumEsR9Uvc5rg7N31BXd0X68+LYPnzHIkP8aA==
+"@paperxyz/react-client-sdk@0.8.11":
+  version "0.8.11"
+  resolved "https://registry.yarnpkg.com/@paperxyz/react-client-sdk/-/react-client-sdk-0.8.11.tgz#25f96d7769395066df84fdd693fea69c80f084d5"
+  integrity sha512-makNNHsZgmxkrLgg6kwSF21HcrlkbngkmCFxsElUUGZBM6jyuCxvRp6HUvVhhGlmhviar0pgI8VXzbJbIyQ4eQ==
   dependencies:
     "@emotion/css" "11.10.5"
     "@headlessui/react" "1.7.6"

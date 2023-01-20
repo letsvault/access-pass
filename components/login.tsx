@@ -36,13 +36,14 @@ const Login = (props: loginProps) => {
         <>
             <div className="loginComponent" style={{display:'flex', justifyContent: 'space-between'}}>
               <div className={styles.signinOption}>
-                <form className={styles.createWalletForm}>
-                <input 
-                  className={styles.createWalletInput}
-                  type="email"
-                  placeholder="Your Email Address"
-                  onChange={(e) => setEmail(e.target.value)}
-                  />
+                <div className={styles.createWalletForm}>
+                  <input 
+                    className={styles.createWalletInput}
+                    type="email"
+                    placeholder="Your Email Address"
+                    onChange={(e) => setEmail(e.target.value)}
+                    onSubmit={(e) => e.preventDefault()}
+                    />
                   <CreateWallet
                     sendEmailOnCreation={true}
                     emailAddress={email}
@@ -63,7 +64,7 @@ const Login = (props: loginProps) => {
                     {creatingWallet ? ('Loading...') : ('First time here')}
                     </button>
                   </CreateWallet>
-                </form>
+                </div>
               </div>
             </div>
             {creatingWallet && !recipientWalletAddress ? (<h3>First time here? Check your email inbox!</h3>) : ("")}

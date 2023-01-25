@@ -8,6 +8,7 @@ import { LoginWithPaper } from "@paperxyz/react-client-sdk";
 import  Image  from "next/image"
 import Login from "../components/login";
 import Connect from "../components/connect";
+import GlobeAnim from "../components/GlobeAnim/GlobeAnim"
 
 export enum Page {
   LOGIN = 'login',
@@ -186,6 +187,7 @@ const Home: NextPage = () => {
         <div style={{marginTop: '20px'}}>
           <p>If you have any issues {currentPage === Page.LOGIN ? "claiming or " : ""} connecting, reach out to us at team@letsvault.xyz.</p>
         </div>
+        <GlobeAnim />
       </main>
     </div>
   );

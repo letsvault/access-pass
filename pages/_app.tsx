@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import "../styles/globals.css";
+import "../components/GlobeAnim/GlobeAnim.css";
 import { PaperSDKProvider } from "@paperxyz/react-client-sdk";
 
 const activeChainId = ChainId.Polygon;
